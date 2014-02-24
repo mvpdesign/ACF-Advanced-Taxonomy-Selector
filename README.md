@@ -1,13 +1,13 @@
-# ACF - Role Selector Field
+# ACF - Advanced Taxonomy Selector
 
-This plugin adds a user role selector to ACF, allowing you to select one or more user roles using a customizable field.
+This plugin allows you to create a field for users to select terms from multiple taxonomies
 
-Welcome to the role selector for Advanced custom fields. For information about the base plugin which is required for the role selector to work, take a look at [ACF on Github](https://github.com/elliotcondon/acf) or the official [ACF Homepage](http://www.advancedcustomfields.com/).
+Welcome to the advanced taxonomy selector for Advanced custom fields. For information about the base plugin which is required for the role selector to work, take a look at [ACF on Github](https://github.com/elliotcondon/acf) or the official [ACF Homepage](http://www.advancedcustomfields.com/).
 
 -----------------------
 
-* Readme : https://github.com/danielpataki/acf-role_selector/blob/master/readme.txt
-* WordPress repository: http://wordpress.org/plugins/acf-role-selector-field/
+* Readme : https://github.com/danielpataki/acf-advanced-taxonomy-selector/blob/master/readme.txt
+* WordPress repository: http://wordpress.org/plugins/acf-advanced-taxonomy-selector-field/
 
 -----------------------
 

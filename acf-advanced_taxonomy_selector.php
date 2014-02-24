@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Advanced Custom Fields: User Role Selector
-Plugin URI: https://github.com/danielpataki/acf-role_selector
-Description: A field for Advanced Custom Fields which allows you to select a user role
+Plugin Name: Advanced Custom Fields: Advanced Taxonomy Selector
+Plugin URI: https://github.com/danielpataki/acf-advanced-taxonomy-selector
+Description: This plugin allows you to create a field where users can select terms from multiple taxonomies
 Version: 1.0.0
 Author: Daniel Pataki
 Author URI: http://danielpataki.com
@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 
-class acf_field_role_selector_plugin
+class acf_field_advanced_taxonomy_selector_plugin
 {
 	/*
 	*  Construct
@@ -25,17 +25,20 @@ class acf_field_role_selector_plugin
 	{
 		// set text domain
 		/*
-		$domain = 'acf-role_selector';
+		$domain = 'acf-advanced_taxonomy_selector';
 		$mofile = trailingslashit(dirname(__File__)) . 'lang/' . $domain . '-' . get_locale() . '.mo';
 		load_textdomain( $domain, $mofile );
 		*/
 
+
+		// version 4+
 		add_action('acf/register_fields', array($this, 'register_fields'));
+
 
 		// version 3-
 		add_action('init', array( $this, 'init' ), 5);
-
 	}
+
 
 	/*
 	*  Init
@@ -49,10 +52,9 @@ class acf_field_role_selector_plugin
 	{
 		if(function_exists('register_field'))
 		{
-			register_field('acf_field_role_selector', dirname(__File__) . '/role_selector-v3.php');
+			register_field('acf_field_advanced_taxonomy_selector', dirname(__File__) . '/advanced_taxonomy_selector-v3.php');
 		}
 	}
-
 
 	/*
 	*  register_fields
@@ -64,11 +66,11 @@ class acf_field_role_selector_plugin
 
 	function register_fields()
 	{
-		include_once('role_selector-v4.php');
+		include_once('advanced_taxonomy_selector-v4.php');
 	}
 
 }
 
-new acf_field_role_selector_plugin();
+new acf_field_advanced_taxonomy_selector_plugin();
 
 ?>
