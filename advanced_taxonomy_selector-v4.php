@@ -24,6 +24,7 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 		$this->category = __("Relational",'acf'); // Basic, Content, Choice, etc
 		$this->defaults = array(
 			'taxonomies' => '',
+			'data_type' => 'terms',
 			'field_type' => 'multiselect',
 			'return_value' => 'term_id'
 		);
@@ -69,6 +70,28 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 		}
 
 		?>
+<tr class="field_option field_option_<?php echo $this->name; ?>">
+	<td class="label">
+		<label><?php _e("Type", 'acf'); ?></label>
+	</td>
+	<td>
+		<?php
+
+		do_action('acf/create_field', array(
+			'type'    =>  'radio',
+			'name'    =>  'fields[' . $key . '][data_type]',
+			'value'   =>  $field['data_type'],
+			'choices' =>  array(
+				'terms' => __( 'Choose Terms', 'acf' ),
+				'taxonomy'  => __( 'Choose Taxonomies', 'acf' ),
+			)
+		));
+
+		?>
+	</td>
+</tr>
+
+
 <tr class="field_option field_option_<?php echo $this->name; ?>">
 	<td class="label">
 		<label><?php _e("Taxonomies", 'acf'); ?></label>
@@ -123,8 +146,8 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 			'name'    =>  'fields[' . $key . '][return_value]',
 			'value'   =>  $field['return_value'],
 			'choices' =>  array(
-				'term_id' => __( 'Term ID', 'acf' ),
-				'object'  => __( 'Object', 'acf' ),
+				'term_id' => __( 'Term ID / Taxonomy Slug', 'acf' ),
+				'object'  => __( 'Term Object / Taxonomy Object', 'acf' ),
 			)
 		));
 
@@ -160,49 +183,86 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 		}
 
 		$taxonomies = array_values( $taxonomies );
-		$term_list = array();
+		
+		if ( $field['data_type'] == 'terms' ) {
+			$term_list = array();
 
-		foreach ( $taxonomies as $taxonomy_slug ) {
-			$taxonomy = get_taxonomy( $taxonomy_slug );
-			$terms = get_terms( $taxonomy_slug );
-			$term_list[$taxonomy_slug] = array(
-				'name' => $taxonomy->label,
-				'slug' => $taxonomy_slug,
-				'terms' => array()
-			);
-			foreach ( $terms as $term ) {
-				$term_list[$taxonomy_slug]['terms'][] = array(
-					'name' => $term->name,
-					'slug' => $term->slug,
-					'term_id' => $term->term_id
+			foreach ( $taxonomies as $taxonomy_slug ) {
+				$taxonomy = get_taxonomy( $taxonomy_slug );
+				$terms = get_terms( $taxonomy_slug );
+				$term_list[$taxonomy_slug] = array(
+					'name' => $taxonomy->label,
+					'slug' => $taxonomy_slug,
+					'terms' => array()
 				);
+				foreach ( $terms as $term ) {
+					$term_list[$taxonomy_slug]['terms'][] = array(
+						'name' => $term->name,
+						'slug' => $term->slug,
+						'term_id' => $term->term_id
+					);
+				}
 			}
+
+			if ( $field['field_type'] == 'multiselect' || $field['field_type'] == 'select' ) :
+			?>
+			<div>
+				<?php if ( $field['field_type'] == 'multiselect' ) : ?>
+				<select name="<?php echo $field['name'] ?>[]" multiple='multiple'>
+				<?php else : ?>
+				<select name="<?php echo $field['name'] ?>[]">
+				<?php endif ?>
+					<?php foreach ( $term_list as $taxonomy ) : ?>
+					<optgroup label='<?php echo $taxonomy['name'] ?>'>
+						<?php
+							foreach( $taxonomy['terms'] as $term ) :
+							$value = $taxonomy['slug'] . '_' . $term['term_id'];
+							$selected = ( in_array( $value, $field['value'] ) ) ? 'selected="selected"' : '';
+						?>
+							<option <?php echo $selected ?> value='<?php echo $value ?>'><?php echo $term['name'] ?></option>
+						<?php endforeach ?>
+					</optgroup>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<?php
+
+			endif;
+
+		}
+		else {
+
+			if ( $field['field_type'] == 'multiselect' || $field['field_type'] == 'select' ) :
+			?>
+			<div>
+				<?php if ( $field['field_type'] == 'multiselect' ) : ?>
+				<select name="<?php echo $field['name'] ?>[]" multiple='multiple'>
+				<?php else : ?>
+				<select name="<?php echo $field['name'] ?>[]">
+				<?php endif ?>
+					<?php 
+						foreach ( $taxonomies as $taxonomy_slug ) : 
+						$taxonomy = get_taxonomy( $taxonomy_slug );
+						$selected = ( 
+							( is_array( $field['value'] ) && in_array( $taxonomy_slug, $field['value'] ) )
+							||
+							( is_string( $field['value'] ) && $taxonomy_slug == $field['value'] )
+							||
+							( empty( $field['value'] ) && $taxonomy_slug == 'bsd_item_type' )
+						) ? 'selected="selected"' : ''
+					?>
+						<option <?php echo $selected ?> value='<?php echo $taxonomy_slug ?>'><?php echo $taxonomy->label ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<?php
+
+			endif;
+
+
 		}
 
-		if ( $field['field_type'] == 'multiselect' || $field['field_type'] == 'select' ) :
-		?>
-		<div>
-			<?php if ( $field['field_type'] == 'multiselect' ) : ?>
-			<select name="<?php echo $field['name'] ?>[]" multiple='multiple'>
-			<?php else : ?>
-			<select name="<?php echo $field['name'] ?>[]">
-			<?php endif ?>
-				<?php foreach ( $term_list as $taxonomy ) : ?>
-				<optgroup label='<?php echo $taxonomy['name'] ?>'>
-					<?php
-						foreach( $taxonomy['terms'] as $term ) :
-						$value = $taxonomy['slug'] . '_' . $term['term_id'];
-						$selected = ( in_array( $value, $field['value'] ) ) ? 'selected="selected"' : '';
-					?>
-						<option <?php echo $selected ?> value='<?php echo $value ?>'><?php echo $term['name'] ?></option>
-					<?php endforeach ?>
-				</optgroup>
-				<?php endforeach ?>
-			</select>
-		</div>
-		<?php
 
-		endif;
 	}
 
 
