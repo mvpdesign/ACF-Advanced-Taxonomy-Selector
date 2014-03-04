@@ -26,6 +26,7 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 			'taxonomies' => '',
 			'data_type' => 'terms',
 			'field_type' => 'multiselect',
+			'allow_null' => true,
 			'return_value' => 'term_id'
 		);
 
@@ -136,6 +137,29 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 
 <tr class="field_option field_option_<?php echo $this->name; ?>">
 	<td class="label">
+		<label><?php _e("Allow Null?", 'acf'); ?></label>
+	</td>
+	<td>
+		<?php
+
+		do_action('acf/create_field', array(
+			'type'    =>  'radio',
+			'name'    =>  'fields[' . $key . '][allow_null]',
+			'layout'  => 'horizontal',
+			'value'   =>  $field['allow_null'],
+			'choices' =>  array(
+				1 => __( 'Yes', 'acf' ),
+				0  => __( 'No', 'acf' ),
+			)
+		));
+
+		?>
+	</td>
+</tr>
+
+
+<tr class="field_option field_option_<?php echo $this->name; ?>">
+	<td class="label">
 		<label><?php _e("Return Value", 'acf'); ?></label>
 	</td>
 	<td>
@@ -212,6 +236,10 @@ class acf_field_advanced_taxonomy_selector extends acf_field
 				<?php else : ?>
 				<select name="<?php echo $field['name'] ?>[]">
 				<?php endif ?>
+
+					<?php if( !empty( $field['allow_null'] ) ) : ?>
+						<option value=''><?php _e( 'All Taxonomies', 'acf' ) ?></option>
+					<?php endif ?>
 					<?php foreach ( $term_list as $taxonomy ) : ?>
 					<optgroup label='<?php echo $taxonomy['name'] ?>'>
 						<?php
