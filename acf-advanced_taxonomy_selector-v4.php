@@ -27,6 +27,7 @@ class acf_field_advanced_taxonomy_selector extends acf_field {
 			'data_type' => 'terms',
 			'field_type' => 'multiselect',
 			'allow_null' => true,
+			'post_tyoe'  => false,
 			'return_value' => 'term_id'
 		);
 
@@ -100,6 +101,25 @@ class acf_field_advanced_taxonomy_selector extends acf_field {
 		?>
 	</td>
 </tr>
+
+<tr class="field_option field_option_<?php echo $this->name; ?>">
+	<td class="label">
+		<label><?php _e("Post Type Restriction",'acf'); ?></label>
+	</td>
+	<td>
+		<?php
+
+		do_action('acf/create_field', array(
+			'type'		=>	'select',
+			'name'		=>	'fields['.$key.'][post_type]',
+			'value'		=>	$field['post_type'],
+			'choices'       =>  $this->post_types_array()
+		));
+
+		?>
+	</td>
+</tr>
+
 
 
 <tr class="field_option field_option_<?php echo $this->name; ?>">
@@ -250,13 +270,16 @@ class acf_field_advanced_taxonomy_selector extends acf_field {
 			<?php if( $field['allow_null'] == true ) : ?>
 			<option value=''><?php _e( 'None', 'acf-advanced_taxonomy_selector' ) ?></option>
 			<?php endif ?>
+			<?php if( empty( $taxonomies ) ) : ?>
+				<option><?php _e( 'No Taxonomies Exist For This Post Type', 'acf-advanced_taxonomy_selector' ) ?></option>
 
-			<?php
+			<?php else :
 				foreach( $taxonomies as $taxonomy ) :
 					$selected = ( !empty( $field['value'] ) && in_array( $taxonomy->name, $field['value'] ) ) ? 'selected="selected"' : '';
 			?>
 				<option <?php echo $selected ?> value='<?php echo $taxonomy->name ?>'><?php echo $taxonomy->label ?></option>
 			<?php endforeach ?>
+			<?php endif ?>
 		</select>
 
 		<?php
@@ -360,12 +383,54 @@ class acf_field_advanced_taxonomy_selector extends acf_field {
 	}
 
 	/*
+	*  Get Post Types
+	*
+	*  Gets public post types
+	*
+	*/
+	function get_post_tyes() {
+		$post_types = get_post_types( array( 'public' => true ) );
+		return $post_types;
+	}
+
+	/*
+	*  Get Post Types Array
+	*
+	*  Gets a slug->name array of post types
+	*
+	*/
+	function post_types_array() {
+		$post_types = $this->get_post_tyes();
+		$choices = array();
+		foreach ( $post_types as $slug => $post_type ) {
+			$choices[$slug] = $post_type;
+		}
+		return $choices;
+	}
+
+
+	/*
 	*  Get Taxonomies From Selection
 	*
 	*  Gets only those taxonomies which have been selected
 	*
 	*/
 	function get_taxonomies_from_selection( $field ) {
+
+		if( !empty( $field['post_type'] ) ) {
+			$type_taxonomies = get_object_taxonomies( $field['post_type'] );
+			$all_taxonomies = get_taxonomies( array(), 'object');
+			$taxonomies = array();
+
+			if( !empty( $type_taxonomies ) ) {
+				foreach( $type_taxonomies as $slug ) {
+					$taxonomies[$slug] = $all_taxonomies[$slug];
+				}
+			}
+
+			return $taxonomies;
+		}
+
 		if( empty( $field['taxonomies'] ) || in_array( 'all', $field['taxonomies'] ) !== false ) {
 			$taxonomies = $this->get_taxonomies();
 		}
