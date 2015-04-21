@@ -1,41 +1,36 @@
-# ACF Advanced Taxonomy Selector Field
+# ACF - Advanced Taxonomy Selector
 
-A plugin which extends Advanced Custom Fields for WordPress to allow users to select Google Fonts.
+A field for Advanced Custom Fields which allows you to create a field where users can select terms or taxonommies flexibly.
 
------------------------
+## Description
 
-### Description
+A more advanced taxonomy selector for ACF. You can create a taxonomy or a term selector and restrict each based on post type or taxonomy. You can also allow for null and determine the return format.
 
-Welcome to the advanced taxonomy selector for Advanced custom fields. For information about the base plugin which is required for the role selector to work, take a look at [ACF on Github](https://github.com/elliotcondon/acf) or the official [ACF Homepage](http://www.advancedcustomfields.com/).
+#### Thanks
+- [Advanced Custom Fields](http://www.advancedcustomfields.com/) for the awesome base plugin.
+- [Muhamad Ulum](https://www.iconfinder.com/oelhoem) for the T icon.
 
+#### Translations
 
-### Compatibility
+The plugin is currently available in English and Hungarian. Please feel free to submit any new languages via a pull request, I'd be mighty thankful.
 
-This ACF field type is compatible with:
-* ACF 5
-* ACF 4
+#### Useful Links
 
-### Installation
+This Github repository is for the development of this plugin. If you would like to read installation and in-depth usage instructions you might want to look at the WordPress plugin page instead.
 
-1. Copy the `acf-advanced_taxonomy_selector` folder into your `wp-content/plugins` folder
-2. Activate the Advanced Taxonomy Selector plugin via the plugins admin page
-3. Create a new field via ACF and select the Advanced Taxonomy Selector type
-4. Please refer to the description for more info regarding the field type settings
+- [Plugin Page](https://wordpress.org/plugins/acf-advanced-taxonomy-selector/)
+- [SVN Repository](http://plugins.svn.wordpress.org/acf-advanced-taxonomy-selector/)
+- [ACF Plugin](https://wordpress.org/plugins/advanced-custom-fields/)
+- [ACF Home Page](http://www.advancedcustomfields.com/)
+- [ACF Documentation](http://www.advancedcustomfields.com/resources/)
+- [ACF Field Template](https://github.com/elliotcondon/acf-field-type-template)
+- [ACF on Github](https://github.com/elliotcondon/acf)
 
+# Want To Help?
 
-### Changelog
-= 1.0 =
-* Initial Release.
+If you like the plugin and you like helping others out there are a few things you can do:
 
-= 2.0 =
-* Dropped ACF 3 support
-* Added ACF 5 support
-
------------------------
-
-* Readme : https://github.com/danielpataki/acf-advanced-taxonomy-selector/blob/master/readme.txt
-* WordPress repository: https://wordpress.org/plugins/acf-google-font-selector-field/
-
------------------------
-
-Special thanks to [Elliot Condon](http://elliotcondon.com) for making the wonderful [ACF plugin](advancedcustomfields.com) in the first place.
+- **[Buy ACF Pro](http://www.advancedcustomfields.com/pro/)**
+- **[Review the plugin](https://wordpress.org/support/view/plugin-reviews/acf-advanced-taxonomy-selector)**
+- **Submit a translation** If you speak another language goodly, you can submit a language file, I'd be mighty thankful! Take a look at the lang directory to see what languages we already have. If a language isn't there create one and submit a pull request. If you have no idea what I'm talking about drop me a line and I'll help you out
+- **[Tip me on Gratipay](https://gratipay.com/danielpataki/)**
