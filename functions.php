@@ -13,7 +13,7 @@
 *
 */
 function acfats_get_taxonomies() {
-	$taxonomies = get_taxonomies( array( '_builtin' => false, 'public' => true ), 'objects' );
+	$taxonomies = get_taxonomies( array( '_builtin' => false ), 'objects' );
 	$taxonomies['category'] = get_taxonomy('category');
 	$taxonomies['post_tag'] = get_taxonomy('post_tag');
 	return $taxonomies;
